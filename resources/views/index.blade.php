@@ -33,7 +33,7 @@
                     <a class="btn btn-outline-dark px-3 py-1 rounded-pill" href="{{ route('login') }}">Login</a>
                 </li>
                 <li class="nav-item me-3">
-                    <a class="btn btn-outline-primary px-3 py-1 rounded-pill" href="#">Sign Up</a>
+                    <a class="btn btn-outline-primary px-3 py-1 rounded-pill" href="{{route('register')}}">Sign Up</a>
                 </li>
 
                 <!-- Profile -->

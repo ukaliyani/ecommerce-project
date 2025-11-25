@@ -1,63 +1,77 @@
 <?php
-
+namespace App\Http\Controllers;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CouponsController;
+
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Admin Panel
-Route::prefix('admin')->group(function() {
 
-    // Dashboard
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-    // Products CRUD
-    Route::get('/products', function () {
-        return view('admin.products');
-    })->name('admin.products');
-
-    // Orders Management
-    Route::get('/orders', function () {
-        return view('admin.orders');
-    })->name('admin.orders');
-
-    // Users Management
-    Route::get('/users', function () {
-        return view('admin.users');
-    })->name('admin.users');
-
-    // Coupons / Discounts
-    Route::get('/coupons', function () {
-        return view('admin.coupons');
-    })->name('admin.coupons');
-
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-// Customer Website
-Route::get('/', function() {
-    return view('index'); // Home Page
+
+require __DIR__.'/auth.php';
+
+Route::get('/home', function () {
+    return view('index');
 })->name('home');
 
-Route::get('/shop', function() {
-    return view('browse'); // Shop / Browse Page
-})->name('shop');
-
-Route::get('/product/{id}', function($id) {
-    return view('product', ['id' => $id]); // Product Details
-})->name('product');
-
-Route::get('/cart', function() {
-    return view('cart'); // Cart Page
+Route::get('/cart', function () {
+    return view('cart');
 })->name('cart');
 
-Route::get('/checkout', function() {
-    return view('checkout'); // Checkout Page
+Route::get('/checkout', function () {
+    return view('checkout');
 })->name('checkout');
 
-Route::get('/login', function() {
-    return view('auth'); // Login / Signup
-})->name('login');
+Route::get('/shop', function () {
+    return view('browse');
+})->name('shop');
 
- Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('admin.dashboard');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->name('admin.dashboard');
+
+Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+    ->name('login');
+
+Route::get('/register', [RegisteredUserController::class, 'create'])
+    ->name('register');
+
+Route::get('/product_form', function () {
+    return view('create_product');
+});
+
+Route::get('/catagory_form', function () {
+    return view('catagory_product');
+});
+
+Route::get('/order_form', function () {
+    return view('order_product');
+});
+Route::get('/coupons_form', function () {
+    return view('coupons');
+});
+Route::resource('categories', CategoryController::class);
+Route::resource('products', ProductController::class);
+Route::resource('orders', OrderController::class);
+
+Route::resource('coupons', CouponsController::class);
+
+
 

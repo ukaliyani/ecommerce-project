@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Product extends Model
+{
+    protected $table = 'products'; // aapka table name
+    protected $fillable = [
+        'name', 
+        'category_id', 
+        'description', 
+        'price', 
+        'sale_price', 
+        'stock', 
+        'status'
+    ];
+    public function category() {
+    return $this->belongsTo(Category::class);
+}
+}
